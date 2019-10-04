@@ -14,6 +14,7 @@ from cleantext import clean
 # from tqdm import tqdm
 
 # rpm -ivh https://forensics.cert.org/centos/cert/7/x86_64//antiword-0.37-9.el7.x86_64.rpm
+from utils import utils
 
 
 class datastructure(object):
@@ -75,7 +76,9 @@ def parse(path, outputFile):
     #         print("ERROR! File {} | Error: {} not supported".format(file, extension))
 
     print("Removing unzipped data")
-    shutil.rmtree(path)
+    utils.remove(path)
+    utils.remove(path)
+
 
     print("Loaded {} files from {} ... Saving unique words ...".format(
         len(data), len(files)))
@@ -95,7 +98,6 @@ def parse(path, outputFile):
     print("JSON data dumped ")
 
 
-
 def parse_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', action='store', default='dataset.txt', dest='dataset_output',
@@ -110,8 +112,9 @@ def parse_argument():
 
 def extract_text(file):
     text = str(textract.process(file))
-    text = clean(text, fix_unicode=True, to_ascii=True, lower=False, no_line_breaks=True, no_punct=True)
-    return text.replace('"', "'").replace("|", "")
+    text = clean(text.replace('"', "'").replace("|", ""), fix_unicode=True, to_ascii=True, lower=False,
+                 no_line_breaks=True, no_punct=False)
+    return text
 
 
 # Return the lits of file contained in all subdirectory
@@ -133,4 +136,5 @@ def unzip_file(path):
     with ZipFile(path) as zip_ref:
         zip_ref.extractall(extractPath)
     print("Files unzipped! ...")
+    utils.remove(path)
     return extractPath + "/" + path.split("/")[-1].replace(".zip", "")

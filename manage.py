@@ -74,7 +74,7 @@ cm.add(Command(
 cm.add(Command(
     "start",
     "runs server with gunicorn in a production setting",
-    lambda c: 'gunicorn -b {0}:{1} server:app'.format(c['host'], c['port']),
+    lambda c: 'gunicorn -b {0}:{1} --timeout 99999 server:app'.format(c['host'], c['port']),
     {
         'FLASK_APP': FLASK_APP,
         'FLASK_DEBUG': 'false'
@@ -123,7 +123,9 @@ parser.add_argument("ipaddress", nargs='?', default=DEFAULT_IP,
 def livereload_check():
     check = subprocess.call("lsof -n -i4TCP:{}".format(CFG['network']["port"]), shell=True)
     if check == 0:
-        output = subprocess.check_output("ps -ef | egrep 'python manage.py|gunicorn' | egrep -v grep | awk '{print $3}'", shell=True).decode().strip()
+        output = subprocess.check_output(
+            "ps -ef | egrep 'python manage.py|gunicorn' | egrep -v grep | awk '{print $3}'",
+            shell=True).decode().strip()
         for _pid in output.split("\n"):
             pypid = int(_pid)
             os.kill(pypid, signal.SIGKILL)

@@ -106,15 +106,17 @@ def unzip_data(unzipped_folder, zip_file):
     return folder_name
 
 
-def remove_dir(directory):
+def remove(path):
     """
     Wrapper for remove a directory
-    :param directory:
+    :param path:
     :return:
     """
-    log.debug("remove_dir | Removing directory {}".format(directory))
-    if os.path.isdir(directory):
-        shutil.rmtree(directory)
+    log.debug("remove_dir | Removing directory {}".format(path))
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+    elif os.path.isfile(path):
+        os.remove(path)
 
 
 def secure_request(request):
