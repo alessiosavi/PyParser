@@ -13,5 +13,5 @@ livereload ='==2.6.1'
 ibmcloudenv ='==0.2.1'
 Flask = "==1.1.1"
 prometheus-client = "==0.7.1"
-setuptools= "==41.2.0"
+setuptools= "==65.5.1"
 flask_monitoringdashboard = "*"
